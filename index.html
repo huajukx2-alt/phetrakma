@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เพชรรักหมา.quiz</title>
+    <!-- Tailwind CSS สำหรับจัดการ UI -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel สำหรับแปลง JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { margin: 0; padding: 0; }
@@ -23,28 +26,81 @@
         const { useState } = React;
         const { createRoot } = ReactDOM;
 
-        // ไอคอน
+        // ไอคอน (Icons)
         const IconSparkles = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>);
         const IconArrowRight = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>);
         const IconHeart = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>);
         const IconShare2 = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>);
         const IconRotateCcw = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>);
 
-        // ข้อมูลคำถาม 10 ข้อ
+        // ชุดคำถาม 8 ข้อ สไตล์กวนๆ มั่นๆ ไม่คิดลบกับตัวเอง
         const questions = [
-            { id: 1, question: { TH: "วันหยุดยาวนี้ คุณอยากทำกิจกรรมอะไรมากที่สุด?", EN: "What do you want to do most this long weekend?" }, options: [{ text: { TH: "ออกไปวิ่งเล่น แอดเวนเจอร์ ลุยป่า!", EN: "Go out, run, and adventure in the wild!" }, trait: "A" }, { text: { TH: "นอนอยู่บ้านเงียบๆ ฟังเพลง ไม่อยากเจอใคร", EN: "Stay home silently, listening to music, avoiding people." }, trait: "B" }, { text: { TH: "ไปคาเฟ่หรือสวนสาธารณะ เจอผู้คนเยอะๆ", EN: "Go to cafes or parks, seeing lots of people." }, trait: "C" }, { text: { TH: "นอนกลิ้งบนโซฟานุ่มๆ พร้อมขนมเต็มโต๊ะ", EN: "Roll on a soft sofa with a table full of snacks." }, trait: "D" }, { text: { TH: "เดินตากแอร์ห้างฟรีๆ ไม่ซื้ออะไร", EN: "Walk in the mall for free AC, buy nothing." }, trait: "E" }, { text: { TH: "ไปเดินตลาดหาของกินฟรี ชิมทุกร้าน", EN: "Go to the market, taste free samples everywhere." }, trait: "F" }] },
-            { id: 2, question: { TH: "เวลาเจอคนที่ไม่รู้จักเข้ามาทักทาย หรือมาหาถึงที่ คุณจะ...", EN: "When a stranger approaches or visits you, you will..." }, options: [{ text: { TH: "แอบด่าในใจ แต่ต่อหน้าทำเป็นยิ้มเจื่อนๆ", EN: "Complain mentally, but smile awkwardly in front of them." }, trait: "G" }, { text: { TH: "มองเหยียดตั้งแต่หัวจรดเท้า แล้วเชิดใส่", EN: "Look them up and down, then act snobbish." }, trait: "H" }, { text: { TH: "สังเกตพฤติกรรมเขาก่อน เผื่อมีอะไรให้เราได้เปรียบ", EN: "Observe them closely to find any advantage." }, trait: "I" }, { text: { TH: "รำคาญ! คนกำลังยุ่ง ทักมาทำไม", EN: "Annoyed! I'm busy, why bother me?" }, trait: "J" }, { text: { TH: "ทำตัวกร่าง วางมาดข่มไว้ก่อน", EN: "Act tough and assert dominance immediately." }, trait: "K" }, { text: { TH: "ทำตัวน่าสงสาร เผื่อเขาจะเลี้ยงขนมหรือให้ของฟรี", EN: "Act pitiful in case they offer free treats." }, trait: "L" }] },
-            { id: 3, question: { TH: "อะไรคือสิ่งที่เยียวยาจิตใจคุณได้ดีที่สุด?", EN: "What heals your soul the best?" }, options: [{ text: { TH: "การได้ทำงานหนักๆ ลุยๆ จนลืมความเครียด", EN: "Working hard and getting dirty to forget stress." }, trait: "M" }, { text: { TH: "การลงสตอรี่เศร้าๆ เรียกร้องความสนใจให้คนมาโอ๋", EN: "Posting sad stories to get attention and comfort." }, trait: "N" }, { text: { TH: "การได้ออกไปบริหารเสน่ห์ เช็คเรตติ้งตัวเอง", EN: "Going out to flirt and check my ratings." }, trait: "O" }, { text: { TH: "การได้นั่งนับเงิน หรือปกป้องของหวงไม่ให้ใครแตะ", EN: "Counting money or fiercely guarding my stuff." }, trait: "P" }, { text: { TH: "การได้ออกกำลังกาย หรือทำกิจกรรมที่ได้เหงื่อ", EN: "Working out or doing sweaty activities." }, trait: "A" }, { text: { TH: "ของสะสมชิ้นโปรดที่หวงมากๆ ห้ามใครแตะ", EN: "Favorite collectibles that nobody is allowed to touch." }, trait: "B" }] },
-            { id: 4, question: { TH: "เวลาเพื่อนกำลังเศร้า คุณจะทำอย่างไร?", EN: "When a friend is sad, what do you do?" }, options: [{ text: { TH: "เข้าไปกอด ปลอบใจ และรับฟังอย่างตั้งใจ", EN: "Hug, comfort, and listen to them carefully." }, trait: "C" }, { text: { TH: "พาไปหาของกินอร่อยๆ เผื่ออารมณ์ดีขึ้น", EN: "Take them to eat good food to cheer them up." }, trait: "D" }, { text: { TH: "เมิน ไม่ใช่เรื่องของฉัน ขี้เกียจรับฟังปัญหา", EN: "Ignore them, not my problem, too lazy to listen." }, trait: "E" }, { text: { TH: "หลอกให้เพื่อนเลี้ยงข้าว อ้างว่ากินแล้วจะอารมณ์ดีขึ้น", EN: "Trick them into buying ME food, saying it helps." }, trait: "F" }, { text: { TH: "โพสต์ด่าลอยๆ แทนเพื่อน แต่ไม่ไปช่วยเคลียร์นะ", EN: "Post vague insults online for them, but do nothing real." }, trait: "G" }, { text: { TH: "พาไปช้อปปิ้งของแพงๆ โชว์รวยปลอบใจ", EN: "Take them luxury shopping, flexing wealth to comfort." }, trait: "H" }] },
-            { id: 5, question: { TH: "สไตล์การทำงานหรือการเรียน ของคุณเป็นแบบไหน?", EN: "What is your working or studying style like?" }, options: [{ text: { TH: "ลอกงานเพื่อนเนียนๆ ไม่ให้ใครจับได้", EN: "Smoothly copy friends' work without getting caught." }, trait: "I" }, { text: { TH: "หัวโบราณ ยึดติดวิธีเดิมๆ ไม่ฟังเด็กยุคใหม่", EN: "Old-school, stick to old ways, ignore the youth." }, trait: "J" }, { text: { TH: "ชอบสั่งคนอื่นให้ทำแทน ทำตัวเป็นลูกพี่", EN: "Boss others around, act like the top dog." }, trait: "K" }, { text: { TH: "ทำตัวใสซื่อ อ้อนให้คนอื่นช่วยทำให้", EN: "Act innocent and beg others to do it for me." }, trait: "L" }, { text: { TH: "ถึกทน ทำงานหนักแค่ไหนก็ได้ ขอแค่เงินถึง", EN: "Endure heavy work, as long as the pay is good." }, trait: "M" }, { text: { TH: "ทำตัวบอบบาง ทำนิดทำหน่อยก็บ่นเหนื่อย", EN: "Act fragile, complain about being tired after 5 minutes." }, trait: "N" }] },
-            { id: 6, question: { TH: "คุณคิดว่าข้อเสียของตัวเองคืออะไร?", EN: "What do you think is your flaw?" }, options: [{ text: { TH: "เจ้าชู้ บ้ากาม วันๆ คิดแต่เรื่องส่องหนุ่ม/สาว", EN: "Flirty, horny, always checking out guys/girls." }, trait: "O" }, { text: { TH: "ขี้หวงเกินเหตุ ใครแตะของฉันคือตาย!", EN: "Overly possessive, touch my stuff and you die!" }, trait: "P" }, { text: { TH: "ไฮเปอร์เกินไป อยู่นิ่งๆ ไม่ค่อยได้", EN: "Too hyper, can't really sit still." }, trait: "A" }, { text: { TH: "ดื้อเงียบ เอาแต่ใจตัวเองนิดๆ", EN: "Stubborn, a bit self-centered secretly." }, trait: "B" }, { text: { TH: "ขี้เหงา ขาดความใส่ใจไม่ได้", EN: "Lonely, can't survive without attention." }, trait: "C" }, { text: { TH: "ขี้เกียจ และเห็นแก่กินมากไปหน่อย", EN: "Lazy and a bit too greedy for food." }, trait: "D" }] },
-            { id: 7, question: { TH: "ถ้าคุณทำผิด แล้วโดนจับได้ คุณจะทำหน้ายังไง?", EN: "If you do something wrong and get caught, what's your face?" }, options: [{ text: { TH: "ทำหน้ามึนใส่ กูไม่ผิด มึงอะผิดที่มาจับผิดกู!", EN: "Look blank. I'm not wrong, you're wrong for looking!" }, trait: "E" }, { text: { TH: "บีบน้ำตา แสดงละครฉากใหญ่ว่าโดนใส่ร้าย", EN: "Fake cry, put on a big show that I was framed." }, trait: "F" }, { text: { TH: "โวยวายเสียงดังกลบเกลื่อนความผิด", EN: "Yell loudly to cover up the guilt." }, trait: "G" }, { text: { TH: "เชิดใส่! ระดับฉันไม่มีคำว่าผิดย่ะ", EN: "Chin up! My level doesn't make mistakes." }, trait: "H" }, { text: { TH: "โยนความผิดให้คนอื่นหน้าตาเฉย", EN: "Blame someone else shamelessly." }, trait: "I" }, { text: { TH: "อ้างความอาวุโส อาบน้ำร้อนมาก่อน กูถูกเสมอ!", EN: "Claim seniority, I was here first so I'm right!" }, trait: "J" }] },
-            { id: 8, question: { TH: "สเปกคนที่คุณอยากอยู่ด้วยมากที่สุดคือแบบไหน?", EN: "What kind of person do you want to be with the most?" }, options: [{ text: { TH: "คนที่ยอมเป็นเบี้ยล่าง คอยทำตามคำสั่งเรา", EN: "Someone who yields to me and follows my orders." }, trait: "K" }, { text: { TH: "คนใจดี เปย์เก่ง มีของกินมาหลอกล่อตลอด", EN: "Kind, generous, always has treats to lure me." }, trait: "L" }, { text: { TH: "สายลุยๆ ติดดิน กินง่ายอยู่ง่าย ไม่เรื่องเยอะ", EN: "Down-to-earth, easy-going, no drama." }, trait: "M" }, { text: { TH: "คนรวยใจบุญที่พร้อมอุปถัมภ์เราไปตลอดชีวิต", EN: "A rich philanthropist ready to sponsor my whole life." }, trait: "N" }, { text: { TH: "หน้าตาดี หุ่นแซ่บ เรื่องอื่นช่างมัน!", EN: "Good looking, hot body, nothing else matters!" }, trait: "O" }, { text: { TH: "คนที่ให้พื้นที่ส่วนตัว และไม่มาจุ้นจ้านกับเรา", EN: "Someone who gives space and respects my boundaries." }, trait: "P" }] },
-            { id: 9, question: { TH: "งานอดิเรกสุดโปรดของคุณคืออะไร?", EN: "What is your favorite hobby?" }, options: [{ text: { TH: "หาทำกิจกรรมผาดโผน หาเรื่องเจ็บตัว", EN: "Extreme activities, looking for trouble." }, trait: "A" }, { text: { TH: "สะสมขยะไว้ในห้องจนไม่มีที่เดิน", EN: "Hoarding junk until there's no space to walk." }, trait: "B" }, { text: { TH: "นั่งส่องสตอรี่ชาวบ้านแล้วรีพลายคุยด้วย", EN: "Watching everyone's stories and replying." }, trait: "C" }, { text: { TH: "กินแล้วนอน นอนแล้วกิน วนลูปไปเรื่อยๆ", EN: "Eat and sleep, sleep and eat. Loop." }, trait: "D" }, { text: { TH: "อู้งานไปตากแอร์ตามห้าง", EN: "Slacking off to enjoy free AC at the mall." }, trait: "E" }, { text: { TH: "หาทางหลอกแดกฟรีตามงานอีเวนต์", EN: "Finding ways to eat for free at events." }, trait: "F" }] },
-            { id: 10, question: { TH: "เวลาหิวตอนดึก คุณจะจัดการความหิวอย่างไร?", EN: "How do you handle late-night hunger?" }, options: [{ text: { TH: "โวยวายหรือบ่นลงโซเชียลจนกว่าจะมีคนสนใจ", EN: "Complain loudly on social media until someone cares." }, trait: "G" }, { text: { TH: "สั่งเดลิเวอรี่ร้านหรูๆ เท่านั้น ของถูกๆ ไม่กิน", EN: "Order only premium delivery, no cheap food." }, trait: "H" }, { text: { TH: "ย่องไปขโมยของกินคนอื่นในตู้เย็น", EN: "Sneak to steal food from someone else's fridge." }, trait: "I" }, { text: { TH: "บ่นว่าหิวแต่ไม่ทำอะไร ทนหิวจนหลับไปเอง", EN: "Complain about hunger but do nothing till asleep." }, trait: "J" }, { text: { TH: "บังคับให้คนในบ้านลุกไปหาอะไรมาให้กิน", EN: "Force someone in the house to get me food." }, trait: "K" }, { text: { TH: "ทักไปอ้อนเพื่อนด้วยสติ๊กเกอร์น่าสงสารให้มันเลี้ยง", EN: "Send sad stickers to friends so they buy me food." }, trait: "L" }] }
+            { id: 1, question: { TH: "สมมติว่าหลงป่ากับเพื่อน คุณจะทำอะไร?", EN: "If you get lost in the forest with friends, what do you do?" }, options: [
+                { text: { TH: "วิ่งนำหน้าเพื่อนไปก่อนเลย... เปล่า ไม่ได้สำรวจทาง กูหนี!", EN: "Run ahead! Not exploring the path, just fleeing!" }, trait: "A" }, 
+                { text: { TH: "ปลีกวิเวกไปหามุมสงบๆ ปล่อยให้พวกที่เหลือโวยวายกันไป", EN: "Find a quiet corner, let the rest panic and scream." }, trait: "B" }, 
+                { text: { TH: "นั่งส่งกำลังใจให้เพื่อนอยู่เฉยๆ พร้อมทำตาปริบๆ รอเพื่อนป้อนข้าว", EN: "Sit and cheer them on, making cute eyes waiting to be fed." }, trait: "C" }, 
+                { text: { TH: "พลังงานหมด ขอทิ้งตัวนอนประท้วงป่าจนกว่าจะมีคนมาอุ้ม", EN: "Energy empty. I'll lay down and protest the forest until carried." }, trait: "D" }, 
+                { text: { TH: "เดินหาจุดที่ลมเย็นที่สุด แล้วสถาปนาตัวเองเป็นเจ้าที่", EN: "Find the coolest breeze and establish myself as the local deity." }, trait: "E" }, 
+                { text: { TH: "ใช้มารยาหญิง/ชาย บ่นปวดขานิดหน่อยให้เพื่อนใจอ่อนยอมแบก", EN: "Use my charm, complain about leg pain so friends melt and carry me." }, trait: "F" }] },
+            
+            { id: 2, question: { TH: "เวลาโดนคนเดินชนไหล่อย่างจัง ปฏิกิริยาแรกคือ?", EN: "Someone bumps into you hard. Your first reaction?" }, options: [
+                { text: { TH: "แหกปากร้อง 'โอ๊ยยย!' ดังๆ ไว้ก่อน เอาให้คนมองทั้งถนน", EN: "Scream 'Ouch!' loudly so the whole street looks at them." }, trait: "G" }, 
+                { text: { TH: "ปรายตามองหัวจรดเท้า แล้วปัดไหล่เบาๆ แบบผู้ดีรังเกียจฝุ่น", EN: "Look them up and down, casually brush off my shoulder like a dusty noble." }, trait: "H" }, 
+                { text: { TH: "จังหวะชุลมุน เนียนๆ สแกนว่าของเขาแบรนด์เนมมั้ย ถ้าใช่ค่อยให้อภัย", EN: "Smoothly scan if their stuff is brand name. If yes, I forgive them." }, trait: "I" }, 
+                { text: { TH: "เทศนาชุดใหญ่เรื่องมารยาททางสังคม เอาให้ยืนสำนึกผิดไม่ทัน", EN: "Preach a full sermon on social manners until they can't repent fast enough." }, trait: "J" }, 
+                { text: { TH: "ทำทรงนักเลงฮึดฮัดใส่ แต่พอเขาหันขวับมา... เอ้า เดินหนีเฉย!", EN: "Act tough, but when they turn around... oops, fast-walk away!" }, trait: "K" }, 
+                { text: { TH: "ส่งสายตาลูกหมาโดนทิ้ง เผื่อเขาหน้าตาดีแล้วขอเลี้ยงกาแฟไถ่โทษ", EN: "Send abandoned-puppy eyes, in case they're hot and buy me coffee to apologize." }, trait: "L" }] },
+            
+            { id: 3, question: { TH: "สไตล์การกินหมูกระทะของคุณคือ?", EN: "What is your Korean BBQ style?" }, options: [
+                { text: { TH: "นินจาหน้าเตา คีบหมูรัวๆ ควันเข้าตาก็ไม่หวั่น สู้เพื่อของกิน!", EN: "Grill ninja, grabbing pork rapidly, fighting the smoke for food!" }, trait: "M" }, 
+                { text: { TH: "นั่งสวยๆ หล่อๆ ถือตะเกียบเป็นพร็อพ รอคนย่างสุกแล้วคีบฉก", EN: "Sit pretty, using chopsticks as a prop, waiting to snatch cooked meat." }, trait: "N" }, 
+                { text: { TH: "มัวแต่สแกนหาคนหน้าตาดีโต๊ะข้างๆ จนหมูในจานตัวเองไหม้", EN: "Busy scanning for hot people at the next table until my own pork burns." }, trait: "O" }, 
+                { text: { TH: "ประกาศกร้าว! 'ชิ้นนี้กูจอง' ใครเอาตะเกียบมาแตะคือมีเรื่อง", EN: "Declare loudly 'This piece is MINE', touch it and we fight." }, trait: "P" }, 
+                { text: { TH: "ปากบ่นว่าไฟอ่อน หมูสุกช้า แต่ตัวเองนั่งเฉยๆ ไม่ช่วยพลิกหมู", EN: "Complain the fire is slow, but sit there and don't help flip the meat." }, trait: "A" }, 
+                { text: { TH: "ร้องวี้ดว้ายทุกครั้งที่น้ำมันกระเด็น ราวกับโดนน้ำมนต์สาด", EN: "Squeal every time oil splashes, as if hit by holy water." }, trait: "G" }] },
+            
+            { id: 4, question: { TH: "ไอเทมลับที่คุณขาดไม่ได้ในชีวิตประจำวัน?", EN: "Your indispensable everyday secret item?" }, options: [
+                { text: { TH: "สมบัติส่วนตัวเต็มห้อง ที่แม่ชอบเรียกว่า 'กองขยะ' แต่เราเรียก 'ศิลปะ'", EN: "Room full of treasures that Mom calls 'trash' but I call 'Art'." }, trait: "B" }, 
+                { text: { TH: "แว่นกันแดดทรงตัวแม่ ใส่เชิดๆ แม้ในวันที่แดดไม่ออก", EN: "Boss-bitch sunglasses, worn proudly even when there's no sun." }, trait: "H" }, 
+                { text: { TH: "เสื้อยืดตัวเก่งที่ซักจนย้วย แต่ใส่สบายสุดๆ ใครห้ามทิ้งเด็ดขาด!", EN: "Favorite stretched-out t-shirt. Extremely comfy, absolutely no throwing it away!" }, trait: "M" }, 
+                { text: { TH: "คาถาเรียกทรัพย์ ท่องทุกวันแต่ไม่ทำงาน รอฟ้าประทานเงินล้าน", EN: "Money-summoning spell, chanted daily (without working), waiting for millions." }, trait: "C" }, 
+                { text: { TH: "ปากกาหรือไฟแช็กเพื่อน ที่เผลอหยิบติดมือมาเป็นของตัวเองบ่อยๆ", EN: "Friends' pens or lighters that somehow accidentally become mine constantly." }, trait: "I" }, 
+                { text: { TH: "คลังสติ๊กเกอร์อ้อนๆ เอาไว้ส่งหาคนเปย์เวลาอยากกินขนมฟรี", EN: "Collection of begging stickers, ready to send to sponsors for free snacks." }, trait: "N" }] },
+            
+            { id: 5, question: { TH: "ถ้าต้องไปเดตแรก จะไปที่ไหน?", EN: "Where would you go on a first date?" }, options: [
+                { text: { TH: "วิดีโอคอลเหอะ ขอครึ่งท่อนบนเป๊ะ ท่อนล่างใส่กางเกงนอน", EN: "Video call. Top half perfect, bottom half pajama pants." }, trait: "D" }, 
+                { text: { TH: "ร้านอาหารแบบมีระดับ ถ้าคู่เดตเคี้ยวข้าวเสียงดังคือหักคะแนนรัวๆ", EN: "Classy restaurant. If the date chews loudly, massive point deductions." }, trait: "J" }, 
+                { text: { TH: "บาร์ชิคๆ เพลงมันส์ๆ เผื่อเดตไม่รอดจะได้หันไปแจกเบอร์โต๊ะข้างๆ แทน", EN: "Chic bar. If the date flops, I can hand my number to the next table." }, trait: "O" }, 
+                { text: { TH: "นัดเดินห้าง แต่เน้นนั่งแช่ตากแอร์ฟรีๆ ในร้านกาแฟแบบไม่ยอมลุก", EN: "Mall meetup, but mainly camping in a cafe for free AC without leaving." }, trait: "E" }, 
+                { text: { TH: "พาไปทำกิจกรรมแอดเวนเจอร์ โชว์ความเท่ให้เขาหลงรักจนหัวปักหัวปำ", EN: "Take them to an adventure activity, show off my coolness so they fall hard." }, trait: "K" }, 
+                { text: { TH: "สถานที่ไพรเวทสุดๆ ใครหน้าไหนก็ห้ามเข้ามาขัดจังหวะโลกส่วนตัวของเรา", EN: "Super private place. Absolutely no one is allowed to interrupt our private world." }, trait: "P" }] },
+            
+            { id: 6, question: { TH: "เวลาทำงานกลุ่ม สไตล์ของคุณคือแบบไหน?", EN: "What is your group project style?" }, options: [
+                { text: { TH: "แกล้งมึนๆ งงๆ ให้เพื่อนรำคาญจนแย่งเอาไปทำเองหมด... หวานเจี๊ยบ!", EN: "Act confused so friends get annoyed and just do it all themselves... Sweet!" }, trait: "F" }, 
+                { text: { TH: "สายเปย์ขนม ซื้อน้ำซื้อขนมมาบำรุงเพื่อน แลกกับการไม่ต้องทำเนื้องาน", EN: "Snack sponsor. Buy treats for friends in exchange for doing zero actual work." }, trait: "L" }, 
+                { text: { TH: "ตอนพรีเซนต์ขอเสียงดังฟังชัด แอคติ้งระดับออสการ์ แต่งานเพื่อนทำ", EN: "Present loud and clear, Oscar-level acting, but friends did all the work." }, trait: "A" }, 
+                { text: { TH: "รับบทผู้บริหาร นั่งชี้นิ้วสั่งงานอย่างมีวิสัยทัศน์ ส่วนลงมือทำ... เชิญพวกเธอจ้ะ", EN: "Take the CEO role. Point fingers and give visionary orders. Actual work? You do it." }, trait: "H" }, 
+                { text: { TH: "แต่งตัวสวย/หล่อมารอเป็นหน้าตาของกลุ่ม งานไม่ยุ่ง มุ่งแต่เป็นกำลังใจ", EN: "Dress up nicely to be the face of the group. No working, just moral support." }, trait: "N" }, 
+                { text: { TH: "หายตัวไปอย่างลึกลับตอนแบ่งงาน แล้วค่อยโผล่มาอีกทีตอนใส่ชื่อ", EN: "Disappear mysteriously during task division, magically reappear to add my name." }, trait: "E" }] },
+            
+            { id: 7, question: { TH: "วันหยุดพักผ่อนที่สมบูรณ์แบบของคุณ?", EN: "Your perfect day off?" }, options: [
+                { text: { TH: "นอนแผ่หลาเป็นผักกาดเหี่ยวๆ รอมีคนใจดีชวนไปเลี้ยงข้าว", EN: "Lay flat like a wilted lettuce, waiting for a kind soul to invite me for a free meal." }, trait: "C" }, 
+                { text: { TH: "นั่งจิบชาหน้าบ้าน คอยจับผิดวัยรุ่นซอยข้างๆ แล้วส่ายหัวเบาๆ", EN: "Sip tea on the porch, judge the neighborhood teens, and softly shake my head." }, trait: "J" }, 
+                { text: { TH: "สร้างอาณาจักรบนโซฟา ใครมาแย่งที่นั่งหรือแย่งรีโมทคือประกาศสงคราม!", EN: "Build an empire on the sofa. Stealing my seat or remote is declaring war!" }, trait: "P" }, 
+                { text: { TH: "ไถโซเชียลตามเผือกทุกดราม่าแบบเรียลไทม์ พลาดไม่ได้แม้แต่วินาทีเดียว", EN: "Scroll social media, following every drama in real-time. Can't miss a single second." }, trait: "G" }, 
+                { text: { TH: "ออกไปหาทำกิจกรรมให้เหงื่อท่วมร่าง ยิ่งเลอะเทอะยิ่งรู้สึกว่าได้ใช้ชีวิต", EN: "Go find an activity to drench in sweat. The messier, the more 'alive' I feel." }, trait: "M" }, 
+                { text: { TH: "จัดห้องแบบลวกๆ ย้ายของกองซ้ายไปกองขวา แล้วภูมิใจว่าห้องสะอาดแล้ว", EN: "Tidy the room lazily. Move the pile from left to right, and feel proud it's 'clean'." }, trait: "B" }] },
+            
+            { id: 8, question: { TH: "คติประจำใจของคุณคือข้อไหน?", EN: "Which motto describes you best?" }, options: [
+                { text: { TH: "เรื่องพรุ่งนี้ ให้ฉันในวันพรุ่งนี้เป็นคนจัดการ... ตอนนี้ขอนอนก่อน", EN: "Leave tomorrow's problems to tomorrow's me... Right now, I sleep." }, trait: "D" }, 
+                { text: { TH: "ของของเพื่อนก็เหมือนของของเรา ขอยืมร้อยปีเดี๋ยวเอามาคืน", EN: "A friend's stuff is my stuff. Let me borrow it for 100 years, I'll return it." }, trait: "I" }, 
+                { text: { TH: "รักเดียวใจเดียวมันเชย ยุคนี้มันต้องหว่านเสน่ห์ให้ครอบคลุมทุกพื้นที่!", EN: "Monogamy is outdated. In this era, you must cast your net of charm everywhere!" }, trait: "O" }, 
+                { text: { TH: "น้ำตาเทียมและมารยาร้อยเล่มเกวียน คือหนทางสู่มื้ออาหารฟรี!", EN: "Artificial tears and a thousand tricks are the path to free meals!" }, trait: "F" }, 
+                { text: { TH: "ศักดิ์ศรีมันค้ำคอ! ถึงจะปอดแหกอยู่ลึกๆ แต่หน้าตากูต้องดูเก๋าไว้ก่อน", EN: "Pride is everything! Even if terrified inside, my face must look hardcore." }, trait: "K" }, 
+                { text: { TH: "เกิดมาหน้าตาดีถือเป็นอาวุธ ใช้ความน่าเอ็นดูสะกดจิตให้คนยอมเปย์", EN: "Being born good-looking is a weapon. Use cuteness to hypnotize people into paying." }, trait: "L" }] }
         ];
 
-        // ข้อมูลผลลัพธ์ 16 สายพันธุ์
+        // ข้อมูลผลลัพธ์ 16 สายพันธุ์ (ยังคงความตลก/ด่าเจ็บ ไว้เหมือนเดิม)
         const results = {
             A: { title: { TH: "หมาจรจัดข้างถนนขี้เรื้อน", EN: "Mangy Street Dog" }, subtitle: { TH: "ทำทรงห้าวแต่จริงๆ วิ่งหางจุกตูด ดีแต่เห่าใบตองแห้ง", EN: "Acts tough but runs away. All bark, no bite." }, description: { TH: "มึงแม่งเป็นพวกทำตัวกร่างไปวันๆ เรียกร้องความสนใจเก่งแต่เอาเข้าจริงก็ปอดแหก! ดีแต่เห่าคนแปลกหน้าแต่พอโดนกระทืบเท้าใส่ก็วิ่งหนีหางจุกตูด ชีวิตนี้ไม่มีอะไรดีนอกจากเดินเกะกะขวางทางให้คนเขาสาปแช่งเล่นๆ ถุย!", EN: "You act tough to get attention, but you're actually a coward! You only bark at strangers, but run away when someone stomps. You do nothing but block the road and get cursed at. Spit!" }, compatible: { TH: "ไม่มีใครอยากคบด้วยหรอก สภาพ!", EN: "Nobody wants to be with you, look at you!" }, color: "#EF4444", bgClass: "bg-red-50", textClass: "text-red-600", illustration: (<svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md"><circle cx="50" cy="55" r="35" fill="#D97706" /><polygon points="15,35 25,10 40,30" fill="#B45309" /><polygon points="85,35 95,50 60,30" fill="#B45309" /><circle cx="35" cy="45" r="8" fill="#FFF" /><circle cx="38" cy="45" r="3" fill="#1C1917" /><circle cx="65" cy="45" r="8" fill="#FFF" /><circle cx="62" cy="48" r="2" fill="#1C1917" /><ellipse cx="50" cy="62" rx="15" ry="12" fill="#FEF3C7" /><polygon points="46,56 54,56 50,60" fill="#1C1917" /><path d="M 45 66 Q 50 70 55 66" stroke="#1C1917" strokeWidth="2" fill="none" /><path d="M 50 66 Q 58 75 50 80 Q 42 75 50 66" fill="#FCA5A5" /></svg>) },
             B: { title: { TH: "หมาจรคุ้ยขยะเปียก", EN: "Dumpster Diver Dog" }, subtitle: { TH: "คิดว่าตัวเองอินดี้ แต่จริงๆ แค่ไม่มีใครคบ ซกมก!", EN: "Thinks they are indie, actually just dirty and lonely!" }, description: { TH: "อย่ามาอ้างว่าโลกส่วนตัวสูง มึงแค่เข้าสังคมไม่เป็นแถมยังซกมก! วันๆ เอาแต่หมกตัวทำตัวไร้ค่าเหมือนหมาคุ้ยเศษอาหารเน่าๆ ในถังขยะ เลิกเบียวคิดว่าตัวเองเท่ได้แล้ว ไม่มีใครเขามองว่ามึงลึกลับน่าค้นหาหรอก เขามองว่ามึงน่ารำคาญ!", EN: "Don't claim you're an introvert, you just lack social skills and smell like wet trash! Stop acting cool, no one finds you mysterious. They just find you annoying!" }, compatible: { TH: "แมลงวันและหนูท่อ (คู่ควรกับมึงที่สุดแล้ว)", EN: "Flies and sewer rats (The perfect match for you)" }, color: "#6B7280", bgClass: "bg-gray-100", textClass: "text-gray-700", illustration: (<svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md"><circle cx="50" cy="55" r="35" fill="#6B7280" /><polygon points="10,40 25,20 40,35" fill="#4B5563" /><polygon points="90,40 75,20 60,35" fill="#4B5563" /><circle cx="32" cy="50" r="10" fill="#FCD34D" /><circle cx="35" cy="48" r="3" fill="#111827" /><circle cx="68" cy="48" r="4" fill="#FCD34D" /><circle cx="68" cy="46" r="1.5" fill="#111827" /><polygon points="47,60 53,60 50,64" fill="#111827" /><path d="M 45 68 Q 50 72 55 64" stroke="#111827" strokeWidth="2" fill="none" /><path d="M 55 64 Q 60 75 55 75 Q 50 75 55 64" fill="#FCA5A5" /></svg>) },
@@ -92,19 +148,33 @@
             };
 
             const startQuiz = () => setScreen('warning');
-            const proceedToQuiz = () => { setScores({ A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0, H: 0, I: 0, J: 0, K: 0, L: 0, M: 0, N: 0, O: 0, P: 0 }); setCurrentQuestionIndex(0); setScreen('quiz'); };
+            
+            const proceedToQuiz = () => { 
+                setScores({ A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0, H: 0, I: 0, J: 0, K: 0, L: 0, M: 0, N: 0, O: 0, P: 0 }); 
+                setCurrentQuestionIndex(0); 
+                setScreen('quiz'); 
+            };
+            
             const handleAnswer = (trait) => {
                 setScores(prev => ({ ...prev, [trait]: prev[trait] + 1 }));
-                if (currentQuestionIndex < questions.length - 1) { setCurrentQuestionIndex(prev => prev + 1); } else { processResult(); }
+                if (currentQuestionIndex < questions.length - 1) { 
+                    setCurrentQuestionIndex(prev => prev + 1); 
+                } else { 
+                    processResult(); 
+                }
             };
+            
             const processResult = () => {
                 setScreen('loading');
                 setTimeout(() => {
-                    let highestTrait = 'A'; let maxScore = scores['A'];
-                    Object.keys(scores).forEach(trait => { if (scores[trait] > maxScore) { highestTrait = trait; maxScore = scores[trait]; } });
-                    setFinalResult(highestTrait); setScreen('result');
+                    const maxScore = Math.max(...Object.values(scores));
+                    const topTraits = Object.keys(scores).filter(trait => scores[trait] === maxScore);
+                    const randomWinningTrait = topTraits[Math.floor(Math.random() * topTraits.length)];
+                    setFinalResult(randomWinningTrait); 
+                    setScreen('result');
                 }, 2500);
             };
+            
             const resetQuiz = () => { setScreen('home'); setFinalResult(null); };
 
             return (
